@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-notification/0.3.6/angular-ui-notification.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-notification/0.3.6/angular-ui-notification.min.js">
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+    <div class="container">
+
+
+        <div class="form-group">
+            <label for="email">To:</label>
+            <input type="email" class="form-control" ng-model="email.to">
+        </div>
+        <div class="form-group">
+            <label for="email">From:</label>
+            <input type="email" class="form-control" ng-model="email.form">
+        </div>
+        <div class="form-group">
+            <label>First Name:</label>
+            <input type="text" class="form-control" ng-model="email.firstName">
+        </div>
+        <div class="form-group">
+            <label>Company Name:</label>
+            <input type="text" class="form-control" ng-model="email
+            .companyName">
+        </div>
+        <div class="form-group">
+            <label>Mail:</label>
+            <textarea class="form-control" cols="30" rows="10" ng-model="email.html" placeholder="Write Mail"></textarea>
+        </div>
+        <button type="submit" class="btn btn-default" ng-click="getReq()">Submit</button>
+    </div>
+    <div class="alert" ng-if="result">
+        <strong> {{result}}
+    </div>
+
+</body>
+
+<script>
+    var app = angular.module('myApp', ['ui-notification']);
+    app.controller('myCtrl', function ($scope, sendEmail, Notification) {
+        $scope.message = "Hello"
+        $scope.email = {
+            to: 'harshi0901@gmail.com',
+            from: 'harshi0901@gmail.com',
+            firstName: 'XYZ',
+            companyName: 'XYZ',
+            html: ''
+        }
+        $scope.getReq = function (mailData) {
+            var mailData = {
+                to: $scope.email.to,
+                from: $scope.email.form,
+                template_id: "d-700d1726a1f04ffda337919b678e4c70",
+                dynamic_template_data: {
+                    userName: 'Harshi',
+                    companyName: 'XYZ'
+                }
+            }
+            console.log(mailData);
+            sendEmail.eData(mailData).then(function (response) {
+                if (response.data.length > 0) {
+                    Notification.success('Mail Sent');
+                } else {
+                    Notification.error('Mail Not Sent')
+                }
+            })
+
+        }
+
+    });
+    app.service('sendEmail', function ($http) {
+        this.eData = function (data) {
+            return $http.post('/send', data);
+        }
+    });
+</script>
+
+</html>

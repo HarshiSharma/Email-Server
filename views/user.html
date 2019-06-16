@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+    <h1>Hi {{message}}</h1>
+    <button ng-click="getReq()">Submit</button>
+
+</body>
+<script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope, $http) {
+        $scope.message = "Hello"
+        $scope.getReq = function() {
+            $http.get('http://localhost:3000/users').then(function(response) {
+                console.log(response.data);
+            });
+
+        }
+    });
+</script>
+
+</html>
